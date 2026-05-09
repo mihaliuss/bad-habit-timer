@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0f0f17">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Bad Habit Timer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0f0f17;color:#fff;min-height:100vh;overflow-x:hidden}
+.view{display:none;min-height:100vh}
+.view.active{display:block}
+
+/* DASHBOARD */
+#v-dash{padding:36px 24px 100px}
+.dash-header h1{font-size:24px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.dash-date{font-size:13px;color:rgba(255,255,255,.35);margin-bottom:32px;font-weight:400}
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
+.habit-card{background:#1a1a2a;border-radius:20px;padding:20px 16px;cursor:pointer;transition:transform .15s,background .15s;border:1px solid rgba(255,255,255,.06)}
+.habit-card:hover{transform:translateY(-2px);background:#1e1e30}
+.habit-card:active{transform:scale(.97)}
+.card-emoji{font-size:28px;margin-bottom:12px;display:block}
+.card-name{font-size:14px;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,.7)}
+.card-days{font-size:32px;font-weight:700;color:#fff;line-height:1;margin-bottom:2px}
+.card-days-lbl{font-size:11px;color:rgba(255,255,255,.3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
+.card-bar-bg{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.card-bar-fill{height:3px;background:#7c6af5;border-radius:2px}
+.card-status{font-size:12px;color:rgba(255,255,255,.35);font-weight:500}
+.card-status.fire{color:#f5a623}
+.card-status.trophy{color:#f5c842}
+.btn-new-habit{width:100%;padding:16px;border-radius:16px;border:1.5px dashed rgba(255,255,255,.13);background:transparent;color:rgba(255,255,255,.35);font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:.2s}
+.btn-new-habit:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
+.empty-dash{text-align:center;padding:40px 0 32px;grid-column:1/-1}
+.empty-dash .big-icon{font-size:52px;margin-bottom:14px}
+.empty-dash p{font-size:14px;color:rgba(255,255,255,.3);line-height:1.6}
+
+/* DETAIL */
+#v-detail{padding:0 0 80px}
+.detail-top{padding:24px 24px 0}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);font-size:14px;font-family:'Inter',sans-serif;padding:9px 14px;border-radius:12px;cursor:pointer;margin-bottom:24px;font-weight:500}
+.btn-back:hover{background:rgba(255,255,255,.11);color:#fff}
+.detail-body{padding:0 24px}
+.detail-name{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
+.detail-attempt{font-size:13px;color:rgba(255,255,255,.3);margin-bottom:28px}
+.ring-wrap{display:flex;justify-content:center;margin-bottom:24px}
+.status-wrap{text-align:center;margin-bottom:24px}
+.status-badge{display:inline-block;padding:7px 20px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(124,106,245,.18);color:#a99eff}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+.stat{background:#1a1a2a;border-radius:16px;padding:16px 10px;text-align:center;border:1px solid rgba(255,255,255,.05)}
+.stat-val{font-size:24px;font-weight:700;color:#fff;line-height:1}
+.stat-lbl{font-size:10px;color:rgba(255,255,255,.3);margin-top:5px;text-transform:uppercase;letter-spacing:.7px;font-weight:600}
+.section-title{font-size:11px;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:12px}
+.ms-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
+.ms-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;background:#1a1a2a;border:1px solid rgba(255,255,255,.05)}
+.ms-item.done{background:rgba(124,106,245,.1);border-color:rgba(124,106,245,.18)}
+.ms-item.current{background:rgba(124,106,245,.2);border:1px solid rgba(124,106,245,.4)}
+.ms-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.12);flex-shrink:0}
+.ms-item.done .ms-dot{background:#7c6af5}
+.ms-item.current .ms-dot{background:#a99eff}
+.ms-text{font-size:14px;color:rgba(255,255,255,.45);font-weight:500}
+.ms-item.done .ms-text{color:#a99eff}
+.ms-item.current .ms-text{color:#fff}
+.ms-right{margin-left:auto;font-size:12px;color:rgba(255,255,255,.22);font-weight:500}
+.ms-item.done .ms-right{color:#7c6af5}
+.ms-item.current .ms-right{color:rgba(255,255,255,.45)}
+.btn-relapse{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(220,53,69,.22);background:transparent;color:rgba(220,53,69,.55);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:.2s}
+.btn-relapse:hover{background:rgba(220,53,69,.07);color:#dc3545}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:flex-end;justify-content:center}
+.modal-bg.open{display:flex}
+.modal{background:#14142a;border-radius:28px 28px 0 0;padding:28px 24px 52px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 24px}
+.modal h2{font-size:20px;font-weight:700;margin-bottom:24px;letter-spacing:-.2px}
+.field{margin-bottom:20px}
+.field label{display:block;font-size:11px;color:rgba(255,255,255,.35);font-weight:600;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.field input[type=text]{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05);color:#fff;font-size:16px;font-family:'Inter',sans-serif;font-weight:500;outline:none;transition:.2s}
+.field input[type=text]:focus{border-color:rgba(124,106,245,.55);background:rgba(124,106,245,.05)}
+.field input[type=text]::placeholder{color:rgba(255,255,255,.18)}
+
+/* Number input */
+.num-input-wrap{display:flex;align-items:center;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;overflow:hidden}
+.num-input-wrap:focus-within{border-color:rgba(124,106,245,.55)}
+.num-btn{width:52px;height:52px;background:transparent;border:none;color:rgba(255,255,255,.4);font-size:24px;font-weight:300;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
+.num-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
+.num-val{flex:1;background:transparent;border:none;color:#fff;font-size:20px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;outline:none;padding:0;-moz-appearance:textfield}
+.num-val::-webkit-inner-spin-button,.num-val::-webkit-outer-spin-button{-webkit-appearance:none}
+
+/* Date picker */
+.date-picker{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;padding:16px}
+.dp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dp-nav button{background:rgba(255,255,255,.07);border:none;color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:.15s}
+.dp-nav button:hover{background:rgba(255,255,255,.14)}
+.dp-month-label{font-size:15px;font-weight:600;color:#fff}
+.dp-weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
+.dp-wd{font-size:11px;color:rgba(255,255,255,.25);text-align:center;padding:4px 0;font-weight:600}
+.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dp-day{font-size:13px;color:rgba(255,255,255,.55);text-align:center;padding:8px 2px;border-radius:8px;cursor:pointer;border:none;background:transparent;font-family:'Inter',sans-serif;font-weight:500;transition:.15s;width:100%}
+.dp-day:hover:not(:disabled){background:rgba(255,255,255,.08);color:#fff}
+.dp-day.today{color:#a99eff;font-weight:700}
+.dp-day.selected{background:#7c6af5 !important;color:#fff !important;font-weight:700}
+.dp-day.other-month{color:rgba(255,255,255,.15)}
+.dp-day:disabled{cursor:default}
+
+.modal-btns{display:flex;gap:12px;margin-top:24px}
+.btn-cancel{flex:1;padding:14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.09);background:transparent;color:rgba(255,255,255,.45);font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
+.btn-save{flex:2;padding:14px;border-radius:14px;border:none;background:#7c6af5;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
+.btn-save:hover{background:#8f7ef7}
+
+/* Confirm */
+.confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:24px}
+.confirm-bg.open{display:flex}
+.confirm-box{background:#14142a;border-radius:24px;padding:32px 24px;max-width:340px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.07)}
+.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:10px}
+.confirm-box p{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:28px;line-height:1.6}
+.confirm-btns{display:flex;gap:10px}
+.btn-no{flex:1;padding:13px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.45);font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
+.btn-yes{flex:1;padding:13px;border-radius:12px;border:none;background:#c0392b;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+
+/* FAB */
+.fab{position:fixed;bottom:28px;right:24px;width:56px;height:56px;border-radius:18px;background:#7c6af5;border:none;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;transition:.2s;font-family:'Inter',sans-serif;box-shadow:0 8px 28px rgba(124,106,245,.35)}
+.fab:hover{background:#8f7ef7;transform:scale(1.05)}
+.fab:active{transform:scale(.95)}
+</style>
+</head>
+<body>
+
+<div id="v-dash" class="view active">
+  <div id="v-dash-inner" style="padding:36px 24px 100px">
+    <div class="dash-header"><h1>Bad Habit Timer</h1></div>
+    <p class="dash-date" id="dash-date"></p>
+    <div class="cards-grid" id="cards-grid"></div>
+    <button class="btn-new-habit" onclick="openModal()">+ Добавить привычку</button>
+  </div>
+</div>
+
+<div id="v-detail" class="view">
+  <div class="detail-top">
+    <button class="btn-back" onclick="showDash()">← Назад</button>
+  </div>
+  <div class="detail-body">
+    <div class="detail-name" id="d-name"></div>
+    <div class="detail-attempt" id="d-attempt"></div>
+    <div class="ring-wrap">
+      <svg width="190" height="190" viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="95" cy="95" r="78" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="13"/>
+        <circle id="ring-progress" cx="95" cy="95" r="78" fill="none" stroke="#7c6af5" stroke-width="13"
+          stroke-linecap="round" stroke-dasharray="490" stroke-dashoffset="490"
+          transform="rotate(-90 95 95)" style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)"/>
+        <text x="95" y="84" text-anchor="middle" fill="#fff" font-size="38" font-weight="700" font-family="Inter,sans-serif" id="ring-days">0</text>
+        <text x="95" y="107" text-anchor="middle" fill="rgba(255,255,255,.38)" font-size="13" font-family="Inter,sans-serif" id="ring-label">дней</text>
+        <text x="95" y="126" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="11" font-family="Inter,sans-serif" id="ring-of"></text>
+      </svg>
+    </div>
+    <div class="status-wrap"><span class="status-badge" id="status-text"></span></div>
+    <div class="stats">
+      <div class="stat"><div class="stat-val" id="s-goal">—</div><div class="stat-lbl">Цель</div></div>
+      <div class="stat"><div class="stat-val" id="s-left">—</div><div class="stat-lbl">Осталось</div></div>
+      <div class="stat"><div class="stat-val" id="s-record">—</div><div class="stat-lbl">Рекорд</div></div>
+    </div>
+    <div class="section-title">Milestone-ы</div>
+    <div class="ms-list" id="ms-list"></div>
+    <button class="btn-relapse" onclick="confirmRelapse()">Был срыв</button>
+  </div>
+</div>
+
+<button class="fab" id="fab-btn" onclick="openModal()">+</button>
+
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <h2>Новая привычка</h2>
+    <div class="field">
+      <label>Название</label>
+      <input type="text" id="f-name" placeholder="Например: Курение"/>
+    </div>
+    <div class="field">
+      <label>Дата начала</label>
+      <div class="date-picker">
+        <div class="dp-nav">
+          <button onclick="dpPrev()">‹</button>
+          <span class="dp-month-label" id="dp-label"></span>
+          <button onclick="dpNext()">›</button>
+        </div>
+        <div class="dp-weekdays">
+          <div class="dp-wd">Пн</div><div class="dp-wd">Вт</div><div class="dp-wd">Ср</div>
+          <div class="dp-wd">Чт</div><div class="dp-wd">Пт</div><div class="dp-wd">Сб</div><div class="dp-wd">Вс</div>
+        </div>
+        <div class="dp-days" id="dp-days"></div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Рекорд (дней, если был)</label>
+      <div class="num-input-wrap">
+        <button class="num-btn" onclick="numChange(-1)">−</button>
+        <input class="num-val" id="f-record" type="number" value="0" min="0" readonly/>
+        <button class="num-btn" onclick="numChange(1)">+</button>
+      </div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-save" onclick="saveHabit()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-bg" id="confirm">
+  <div class="confirm-box">
+    <h3>Был срыв?</h3>
+    <p>Счётчик сбросится до нуля, но рекорд сохранится. Главное — продолжать.</p>
+    <div class="confirm-btns">
+      <button class="btn-no" onclick="closeConfirm()">Нет</button>
+      <button class="btn-yes" onclick="doRelapse()">Да, сброс</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MILESTONES=[3,7,14,30,90,180,365];
+const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const EMOJIS=['🚬','🍺','🍬','📱','🎮','☕','🍔','💊','😤','🌿'];
+let habits=JSON.parse(localStorage.getItem('bht3_habits')||'[]');
+let current=0,dpYear,dpMonth,dpSelected;
+
+function daysBetween(s){
+  const a=new Date(s);a.setHours(0,0,0,0);
+  const b=new Date();b.setHours(0,0,0,0);
+  return Math.max(0,Math.round((b-a)/86400000));
+}
+function getGoal(d){for(const m of MILESTONES)if(d<m)return m;return MILESTONES[MILESTONES.length-1];}
+function dayWord(n){
+  if(n%10===1&&n%100!==11)return 'день';
+  if([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))return 'дня';
+  return 'дней';
+}
+
+function showDash(){
+  document.getElementById('v-dash').classList.add('active');
+  document.getElementById('v-detail').classList.remove('active');
+  document.getElementById('fab-btn').style.display='flex';
+  renderDash();
+}
+function showDetail(i){
+  current=i;
+  document.getElementById('v-dash').classList.remove('active');
+  document.getElementById('v-detail').classList.add('active');
+  document.getElementById('fab-btn').style.display='none';
+  renderDetail();
+}
+
+function renderDash(){
+  const today=new Date();
+  document.getElementById('dash-date').textContent=today.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+  const grid=document.getElementById('cards-grid');
+  grid.innerHTML='';
+  if(!habits.length){
+    grid.innerHTML='<div class="empty-dash"><div class="big-icon">🌱</div><p>Добавь первую привычку<br>и начни отсчёт</p></div>';
+    return;
+  }
+  habits.forEach((h,i)=>{
+    const days=daysBetween(h.startDate);
+    const goal=getGoal(days);
+    const pct=Math.min(100,Math.round(days/goal*100));
+    let st='💪 Держишься',sc='';
+    if(days>=goal){st='🏆 Цель!';sc='trophy';}
+    else if(days>0&&days>=(h.record||0)){st='🔥 Рекорд!';sc='fire';}
+    const c=document.createElement('div');
+    c.className='habit-card';
+    c.onclick=()=>showDetail(i);
+    c.innerHTML=`<span class="card-emoji">${h.emoji||'🌿'}</span><div class="card-name">${h.name}</div><div class="card-days">${days}</div><div class="card-days-lbl">${dayWord(days)}</div><div class="card-bar-bg"><div class="card-bar-fill" style="width:${pct}%"></div></div><div class="card-status ${sc}">${st}</div>`;
+    grid.appendChild(c);
+  });
+}
+
+function renderDetail(){
+  const h=habits[current];
+  const days=daysBetween(h.startDate);
+  const goal=getGoal(days);
+  const left=Math.max(0,goal-days);
+  const record=Math.max(h.record||0,days);
+  const pct=Math.min(1,days/goal);
+  document.getElementById('d-name').textContent=(h.emoji||'🌿')+' '+h.name;
+  document.getElementById('d-attempt').textContent='Попытка '+(h.attempt||1);
+  document.getElementById('ring-days').textContent=days;
+  document.getElementById('ring-label').textContent=dayWord(days);
+  document.getElementById('ring-of').textContent='из '+goal;
+  setTimeout(()=>document.getElementById('ring-progress').style.strokeDashoffset=490*(1-pct),50);
+  document.getElementById('s-goal').textContent=goal;
+  document.getElementById('s-left').textContent=left;
+  document.getElementById('s-record').textContent=record;
+  let status='💪 Держишься';
+  if(days>=goal)status='🏆 Цель достигнута!';
+  else if(days>0&&days>=(h.record||0))status='🔥 Новый рекорд!';
+  document.getElementById('status-text').textContent=status;
+  const ml=document.getElementById('ms-list');
+  ml.innerHTML='';
+  MILESTONES.forEach(m=>{
+    const done=days>=m,isCur=!done&&getGoal(days)===m;
+    const d=document.createElement('div');
+    d.className='ms-item'+(done?' done':isCur?' current':'');
+    const r=done?'✓ Выполнено':(isCur?'осталось '+(m-days)+' д.':'через '+(m-days)+' д.');
+    d.innerHTML=`<div class="ms-dot"></div><span class="ms-text">${m} дней</span><span class="ms-right">${r}</span>`;
+    ml.appendChild(d);
+  });
+}
+
+function initDp(){
+  const n=new Date();
+  dpYear=n.getFullYear();dpMonth=n.getMonth();
+  dpSelected=n.toISOString().slice(0,10);
+  renderDp();
+}
+function dpPrev(){dpMonth--;if(dpMonth<0){dpMonth=11;dpYear--;}renderDp();}
+function dpNext(){dpMonth++;if(dpMonth>11){dpMonth=0;dpYear++;}renderDp();}
+function renderDp(){
+  document.getElementById('dp-label').textContent=MONTHS[dpMonth]+' '+dpYear;
+  const c=document.getElementById('dp-days');
+  c.innerHTML='';
+  const first=new Date(dpYear,dpMonth,1).getDay();
+  const offset=first===0?6:first-1;
+  const daysInMonth=new Date(dpYear,dpMonth+1,0).getDate();
+  const today=new Date().toISOString().slice(0,10);
+  for(let i=0;i<offset;i++){const b=document.createElement('button');b.className='dp-day';b.disabled=true;c.appendChild(b);}
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=dpYear+'-'+String(dpMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    const b=document.createElement('button');
+    b.className='dp-day'+(ds===today?' today':'')+(ds===dpSelected?' selected':'');
+    b.textContent=d;
+    b.onclick=()=>{dpSelected=ds;renderDp();};
+    c.appendChild(b);
+  }
+}
+
+function numChange(delta){
+  const el=document.getElementById('f-record');
+  el.value=Math.max(0,(parseInt(el.value)||0)+delta);
+}
+
+function openModal(){
+  document.getElementById('f-name').value='';
+  document.getElementById('f-record').value='0';
+  initDp();
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function saveHabit(){
+  const name=document.getElementById('f-name').value.trim();
+  if(!name){document.getElementById('f-name').focus();return;}
+  const rec=parseInt(document.getElementById('f-record').value)||0;
+  const emoji=EMOJIS[habits.length%EMOJIS.length];
+  habits.push({name,startDate:dpSelected,record:rec,attempt:1,emoji});
+  save();closeModal();renderDash();
+}
+
+function confirmRelapse(){document.getElementById('confirm').classList.add('open');}
+function closeConfirm(){document.getElementById('confirm').classList.remove('open');}
+function doRelapse(){
+  const h=habits[current];
+  const days=daysBetween(h.startDate);
+  if(days>(h.record||0))h.record=days;
+  h.attempt=(h.attempt||1)+1;
+  h.startDate=new Date().toISOString().slice(0,10);
+  save();closeConfirm();renderDetail();
+}
+function save(){localStorage.setItem('bht3_habits',JSON.stringify(habits));}
+
+if(!habits.length){
+  habits=[{name:'Курение',startDate:'2026-01-13',record:115,attempt:1,emoji:'🚬'}];
+  save();
+}
+renderDash();
+</script>
+</body>
+</html>
