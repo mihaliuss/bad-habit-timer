@@ -11,68 +11,56 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:100vh;overflow-x:hidden}
-
 .view{display:none}
 .view.active{display:block;animation:viewIn .28s cubic-bezier(.34,1.2,.64,1)}
 @keyframes viewIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
-/* DASHBOARD */
 #v-dash{min-height:100vh;padding:52px 20px 100px;max-width:480px;margin:0 auto}
 .dash-title{text-align:center;font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
 .dash-date{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:32px}
-
 .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
-.habit-card{background:#7c6af5;border-radius:22px;padding:22px 18px;cursor:pointer;box-shadow:0 4px 20px rgba(26,22,48,.25);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease}
-.habit-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(26,22,48,.35)}
-.habit-card:active{transform:scale(.95);box-shadow:0 2px 10px rgba(26,22,48,.2)}
+.habit-card{background:#7c6af5;border-radius:22px;padding:22px 18px;cursor:pointer;box-shadow:0 4px 20px rgba(124,106,245,.3);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease}
+.habit-card:hover{transform:translateY(-5px);box-shadow:0 12px 32px rgba(124,106,245,.4)}
+.habit-card:active{transform:scale(.95)}
 .card-emoji{font-size:30px;margin-bottom:12px;display:block}
 .card-name{font-size:12px;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px}
 .card-days{font-size:34px;font-weight:700;color:#fff;line-height:1}
 .card-unit{font-size:11px;color:rgba(255,255,255,.75);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
 .card-bar-bg{height:3px;background:rgba(255,255,255,.25);border-radius:2px;margin-bottom:10px;overflow:hidden}
-.card-bar{height:3px;background:rgba(255,255,255,.5);border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
-.card-status{font-size:12px;color:rgba(255,255,255,.8);font-weight:500}
-.card-status.fire{color:#f5a623}
-.card-status.trophy{color:#f0c040}
-
+.card-bar{height:3px;background:rgba(255,255,255,.7);border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.card-status{font-size:12px;color:rgba(255,255,255,.85);font-weight:500}
+.card-status.fire{color:#ffd166}
+.card-status.trophy{color:#ffe566}
 .btn-add{width:100%;padding:16px;border-radius:16px;border:1.5px dashed rgba(0,0,0,.15);background:transparent;color:#8e8e93;font-size:15px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s ease}
 .btn-add:hover{background:rgba(124,106,245,.08);color:#7c6af5;border-color:rgba(124,106,245,.3)}
 .btn-add:active{transform:scale(.98)}
 
-/* DETAIL */
 #v-detail{min-height:100vh;padding:0 0 80px}
 .detail-wrap{max-width:480px;margin:0 auto}
 .detail-top{padding:24px 20px 0}
 .btn-back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid rgba(0,0,0,.09);color:#1c1c1e;font-size:14px;font-family:'Inter',sans-serif;padding:9px 14px;border-radius:12px;cursor:pointer;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:all .2s ease}
 .btn-back:hover{background:#f0f0f5;transform:translateX(-2px)}
 .btn-back:active{transform:scale(.96)}
-
 .detail-body{padding:20px 20px 0}
 .detail-name{text-align:center;font-size:24px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
 .detail-sub{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:24px}
 
-/* TIMER */
 .timer-grid{display:flex;align-items:flex-start;justify-content:center;gap:2px;margin-bottom:28px}
-.t-box{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:72px}
+.t-box{display:flex;flex-direction:column;align-items:center;gap:5px;min-width:68px}
 .t-num{font-size:40px;font-weight:700;color:#7c6af5;font-variant-numeric:tabular-nums;line-height:1}
 .t-lbl{font-size:10px;color:#8e8e93;text-transform:uppercase;letter-spacing:.6px;font-weight:600}
-.t-sep{font-size:34px;font-weight:700;color:rgba(124,106,245,.35);margin-top:3px;padding:0 2px}
+.t-sep{font-size:34px;font-weight:700;color:rgba(124,106,245,.3);margin-top:3px;padding:0 1px}
 
-/* RING */
 .ring-wrap{display:flex;justify-content:center;margin-bottom:16px}
 .status-wrap{text-align:center;margin-bottom:20px}
 .status-badge{display:inline-block;padding:7px 20px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(124,106,245,.12);color:#7c6af5}
-
 .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
 .stat{background:rgba(124,106,245,.1);border-radius:16px;padding:14px 10px;text-align:center;border:1px solid rgba(124,106,245,.18)}
 .stat-val{font-size:22px;font-weight:700;color:#1c1c1e}
 .stat-lbl{font-size:10px;color:#8e8e93;text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-top:4px}
-
 .start-info{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:24px}
 .start-info strong{color:#1c1c1e;font-weight:500}
-
 .sec-title{font-size:11px;color:#8e8e93;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:10px}
-
 .ms-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
 .ms-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .ms-item.done{background:rgba(124,106,245,.08);border-color:rgba(124,106,245,.18)}
@@ -86,24 +74,20 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 .ms-right{margin-left:auto;font-size:12px;color:#c7c7cc;font-weight:500}
 .ms-item.done .ms-right{color:#7c6af5}
 .ms-item.current .ms-right{color:#8e8e93}
-
 .history-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
 .history-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.04)}
 .h-dot{width:9px;height:9px;border-radius:50%;background:#ff3b30;flex-shrink:0}
 .h-dot.green{background:#34c759}
 .h-date{font-size:13px;font-weight:500;color:#1c1c1e}
 .h-days{font-size:12px;color:#8e8e93;margin-top:1px}
-
 .btn-relapse{width:100%;padding:14px;border-radius:14px;border:1.5px solid rgba(255,59,48,.2);background:rgba(255,59,48,.05);color:rgba(255,59,48,.8);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s ease}
 .btn-relapse:hover{background:rgba(255,59,48,.1);border-color:rgba(255,59,48,.4);color:#ff3b30}
 .btn-relapse:active{transform:scale(.97)}
 
-/* FAB */
 .fab{position:fixed;bottom:28px;right:24px;width:56px;height:56px;border-radius:18px;background:#7c6af5;border:none;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;font-family:'Inter',sans-serif;box-shadow:0 8px 24px rgba(124,106,245,.38);transition:all .25s cubic-bezier(.34,1.56,.64,1)}
 .fab:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(124,106,245,.48)}
 .fab:active{transform:scale(.93)}
 
-/* MODAL */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:28px 28px 0 0;padding:20px 20px 44px;width:100%;max-width:480px;max-height:96vh;overflow:hidden;animation:slideUp .3s cubic-bezier(.34,1.2,.64,1)}
@@ -122,7 +106,8 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 .e-btn:active{transform:scale(.95)}
 .e-btn.sel{border-color:#7c6af5;background:rgba(124,106,245,.12);transform:scale(1.12)}
 
-.dp-wrap{background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:12px}
+.date-time-row{display:flex;gap:8px}
+.dp-wrap{flex:1;background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:12px}
 .dp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .dp-nav-btn{background:rgba(0,0,0,.06);border:none;color:#1c1c1e;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Inter',sans-serif}
 .dp-nav-btn:hover{background:rgba(124,106,245,.15)}
@@ -137,6 +122,11 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 .dp-d.sel{background:#7c6af5!important;color:#fff!important;font-weight:700}
 .dp-d.other{color:#c7c7cc}
 .dp-d:disabled{cursor:default}
+
+.time-wrap{background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:90px;align-items:center;justify-content:center}
+.time-label{font-size:10px;color:#8e8e93;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.time-input{width:100%;padding:8px 6px;border-radius:10px;border:1.5px solid rgba(0,0,0,.08);background:#fff;color:#7c6af5;font-size:20px;font-weight:700;font-family:'Inter',sans-serif;text-align:center;outline:none;transition:border-color .2s}
+.time-input:focus{border-color:#7c6af5}
 
 .num-row{display:flex;align-items:center;background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;overflow:hidden;transition:border-color .2s}
 .num-row:focus-within{border-color:#7c6af5}
@@ -154,7 +144,6 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 .btn-save:hover{background:#8f7ef7;box-shadow:0 6px 20px rgba(124,106,245,.42)}
 .btn-save:active{transform:scale(.97)}
 
-/* CONFIRM */
 .confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 .confirm-bg.open{display:flex}
 .confirm-box{background:#fff;border-radius:24px;padding:28px 24px;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18);animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
@@ -171,7 +160,6 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 </head>
 <body>
 
-<!-- DASHBOARD -->
 <div id="v-dash" class="view active">
   <div style="max-width:480px;margin:0 auto;padding:52px 20px 100px">
     <h1 class="dash-title">Bad Habit Timer</h1>
@@ -181,7 +169,6 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
   </div>
 </div>
 
-<!-- DETAIL -->
 <div id="v-detail" class="view">
   <div class="detail-wrap">
     <div class="detail-top">
@@ -190,7 +177,6 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
     <div class="detail-body">
       <div class="detail-name" id="d-name"></div>
       <div class="detail-sub" id="d-sub"></div>
-
       <div class="timer-grid">
         <div class="t-box"><span class="t-num" id="t-d">00</span><span class="t-lbl">Дни</span></div>
         <div class="t-sep">:</div>
@@ -200,12 +186,10 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
         <div class="t-sep">:</div>
         <div class="t-box"><span class="t-num" id="t-s">00</span><span class="t-lbl">Сек</span></div>
       </div>
-
       <div class="ring-wrap">
         <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
           <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="14"/>
-          <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(124,106,245,.12)" stroke-width="14"
-            stroke-dasharray="578" transform="rotate(-90 110 110)"/>
+          <circle cx="110" cy="110" r="92" fill="none" stroke="rgba(124,106,245,.12)" stroke-width="14" stroke-dasharray="578" transform="rotate(-90 110 110)"/>
           <circle id="ring-p" cx="110" cy="110" r="92" fill="none" stroke="#7c6af5" stroke-width="14"
             stroke-linecap="round" stroke-dasharray="578" stroke-dashoffset="578"
             transform="rotate(-90 110 110)" style="transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1)"/>
@@ -213,23 +197,17 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
           <text x="110" y="128" text-anchor="middle" fill="#7c6af5" font-size="26" font-weight="700" font-family="Inter,sans-serif" id="r-goal">—</text>
         </svg>
       </div>
-
       <div class="status-wrap"><span class="status-badge" id="d-status"></span></div>
-
       <div class="stats">
         <div class="stat"><div class="stat-val" id="s-days">—</div><div class="stat-lbl">Дней</div></div>
         <div class="stat"><div class="stat-val" id="s-left">—</div><div class="stat-lbl">Осталось</div></div>
         <div class="stat"><div class="stat-val" id="s-rec">—</div><div class="stat-lbl">Рекорд</div></div>
       </div>
-
       <div class="start-info">Начало: <strong id="d-start"></strong></div>
-
       <div style="margin-top:24px" class="sec-title">Цели</div>
       <div class="ms-list" id="ms-list"></div>
-
       <div class="sec-title">История</div>
       <div class="history-list" id="h-list"></div>
-
       <button class="btn-relapse" onclick="confirmRelapse()">Рецидив</button>
     </div>
   </div>
@@ -237,32 +215,37 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 
 <button class="fab" id="fab-btn" onclick="openModal()">+</button>
 
-<!-- MODAL -->
 <div class="modal-bg" id="modal" onclick="bgClick(event)">
   <div class="modal" id="modal-box">
     <div class="modal-handle"></div>
     <h2>Новая привычка</h2>
     <div class="field">
       <label>Название</label>
-      <input type="text" id="f-name" placeholder="Например: Курение" oninput="autoEmoji()"/>
+      <input type="text" id="f-name" placeholder="Например: Курение" oninput="onNameInput()"/>
     </div>
     <div class="field">
       <label>Иконка</label>
       <div class="emoji-grid" id="emoji-grid"></div>
     </div>
     <div class="field">
-      <label>Дата начала</label>
-      <div class="dp-wrap">
-        <div class="dp-nav">
-          <button class="dp-nav-btn" onclick="dpPrev()">‹</button>
-          <span class="dp-month" id="dp-label"></span>
-          <button class="dp-nav-btn" onclick="dpNext()">›</button>
+      <label>Дата и время начала</label>
+      <div class="date-time-row">
+        <div class="dp-wrap">
+          <div class="dp-nav">
+            <button class="dp-nav-btn" onclick="dpPrev()">‹</button>
+            <span class="dp-month" id="dp-label"></span>
+            <button class="dp-nav-btn" onclick="dpNext()">›</button>
+          </div>
+          <div class="dp-wds">
+            <div class="dp-wd">Пн</div><div class="dp-wd">Вт</div><div class="dp-wd">Ср</div>
+            <div class="dp-wd">Чт</div><div class="dp-wd">Пт</div><div class="dp-wd">Сб</div><div class="dp-wd">Вс</div>
+          </div>
+          <div class="dp-days" id="dp-days"></div>
         </div>
-        <div class="dp-wds">
-          <div class="dp-wd">Пн</div><div class="dp-wd">Вт</div><div class="dp-wd">Ср</div>
-          <div class="dp-wd">Чт</div><div class="dp-wd">Пт</div><div class="dp-wd">Сб</div><div class="dp-wd">Вс</div>
+        <div class="time-wrap">
+          <span class="time-label">Время</span>
+          <input class="time-input" type="time" id="f-time"/>
         </div>
-        <div class="dp-days" id="dp-days"></div>
       </div>
     </div>
     <div class="field">
@@ -280,11 +263,10 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
   </div>
 </div>
 
-<!-- CONFIRM -->
 <div class="confirm-bg" id="confirm">
   <div class="confirm-box">
     <h3>Рецидив?</h3>
-    <p>Счётчик сбросится до нуля. Рекорд и история сохранятся.</p>
+    <p>Счётчик сбросится прямо сейчас. Рекорд и история сохранятся.</p>
     <div class="confirm-btns">
       <button class="c-no" onclick="closeConfirm()">Нет</button>
       <button class="c-yes" onclick="doRelapse()">Да</button>
@@ -296,31 +278,47 @@ body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:
 const ML=[3,7,14,30,90,180,365];
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
 const EMOJIS=['🚬','🍺','🍬','📱','☕','🍔','💊','🎮','😴','🏃','🌿','✨','🎰','💸','😤','🧁','🍷','📺'];
+
 const EMAP=[
-  [['кур','сигар','табак'],'🚬'],
-  [['алко','пив','вин','водк','ром','виски'],'🍺'],
-  [['сахар','слад','шокол','конфет','торт'],'🍬'],
-  [['соцсет','инстаграм','тикток','телефон','смартфон'],'📱'],
-  [['кофе'],'☕'],
-  [['фастфуд','бургер'],'🍔'],
-  [['нарко','таблет'],'💊'],
-  [['игр','казино','азарт','ставк'],'🎰'],
-  [['сон','просып','режим'],'😴'],
-  [['бег','спорт','трениров'],'🏃'],
-  [['деньг','трат','шопинг'],'💸'],
-  [['телевиз','сериал','ютуб'],'📺'],
+  [['кур','сигар','табак'],'🚬','Курение'],
+  [['алко','пив','вин','водк','ром','виски'],'🍺','Алкоголь'],
+  [['сахар','слад','шокол','конфет','торт'],'🍬','Сладкое'],
+  [['соцсет','инстаграм','тикток','телефон','смартфон'],'📱','Соцсети'],
+  [['кофе'],'☕','Кофе'],
+  [['фастфуд','бургер'],'🍔','Фастфуд'],
+  [['нарко','таблет'],'💊','Таблетки'],
+  [['игр','казино','азарт','ставк'],'🎰','Азартные игры'],
+  [['сон','просып','режим'],'😴','Режим сна'],
+  [['бег','спорт','трениров'],'🏃','Спорт'],
+  [['деньг','трат','шопинг'],'💸','Шопинг'],
+  [['телевиз','сериал','ютуб'],'📺','Телевизор'],
 ];
 
-let habits=JSON.parse(localStorage.getItem('bht6')||'[]');
+const EMOJI_NAMES={
+  '🚬':'Курение','🍺':'Алкоголь','🍬':'Сладкое','📱':'Соцсети',
+  '☕':'Кофе','🍔':'Фастфуд','💊':'Таблетки','🎮':'Игры',
+  '😴':'Режим сна','🏃':'Спорт','🎰':'Азартные игры','💸':'Шопинг',
+  '😤':'Стресс','🧁':'Выпечка','🍷':'Вино','📺':'Телевизор','🌿':'','✨':''
+};
+
+let habits=JSON.parse(localStorage.getItem('bht7')||'[]');
 let cur=0,timerInt=null,dpY,dpM,dpSel,selE='🌿';
 
-function pad(n,l=2){return String(Math.floor(n)).padStart(l,'0')}
+function pad(n){return String(Math.floor(n)).padStart(2,'0')}
 function dw(n){if(n%10===1&&n%100!==11)return'день';if([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))return'дня';return'дней'}
 function df(s){return new Date(s+'T00:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}
-function dayCount(s){const a=new Date(s+'T00:00:00');const b=new Date();b.setHours(0,0,0,0);return Math.max(0,Math.round((b-a)/86400000))}
+function dft(date,time){
+  const d=new Date(date+'T'+(time||'00:00')+':00');
+  return d.toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
+}
+function dayCount(date,time){
+  const a=new Date(date+'T'+(time||'00:00')+':00');
+  const b=new Date();b.setHours(0,0,0,0);
+  return Math.max(0,Math.floor((b-a)/86400000));
+}
 function getGoal(d){for(const m of ML)if(d<m)return m;return ML[ML.length-1]}
 
-function autoEmoji(){
+function onNameInput(){
   const n=document.getElementById('f-name').value.toLowerCase();
   for(const[keys,e]of EMAP){if(keys.some(k=>n.includes(k))){selE=e;renderEG();return;}}
 }
@@ -331,7 +329,14 @@ function renderEG(){
     const b=document.createElement('button');
     b.className='e-btn'+(e===selE?' sel':'');
     b.textContent=e;b.type='button';
-    b.onclick=()=>{selE=e;renderEG();};
+    b.onclick=()=>{
+      selE=e;
+      renderEG();
+      const nameField=document.getElementById('f-name');
+      if(!nameField.value.trim()&&EMOJI_NAMES[e]){
+        nameField.value=EMOJI_NAMES[e];
+      }
+    };
     g.appendChild(b);
   });
 }
@@ -361,7 +366,7 @@ function renderDash(){
     return;
   }
   habits.forEach((h,i)=>{
-    const d=dayCount(h.startDate),gl=getGoal(d),pct=Math.min(100,Math.round(d/gl*100));
+    const d=dayCount(h.startDate,h.startTime),gl=getGoal(d),pct=Math.min(100,Math.round(d/gl*100));
     let st='💪 Держишься',sc='';
     if(d>=gl){st='🏆 Цель!';sc='trophy';}
     else if(d>0&&d>=(h.record||0)){st='🔥 Рекорд!';sc='fire';}
@@ -373,14 +378,14 @@ function renderDash(){
 
 function renderDetail(){
   const h=habits[cur];
-  const d=dayCount(h.startDate),gl=getGoal(d),left=Math.max(0,gl-d),rec=Math.max(h.record||0,d),pct=Math.min(1,d/gl);
+  const d=dayCount(h.startDate,h.startTime),gl=getGoal(d),left=Math.max(0,gl-d),rec=Math.max(h.record||0,d),pct=Math.min(1,d/gl);
   document.getElementById('d-name').textContent=(h.emoji||'🌿')+' '+h.name;
   document.getElementById('d-sub').textContent='Попытка '+(h.attempt||1);
   document.getElementById('r-goal').textContent=gl+' дн.';
   document.getElementById('s-days').textContent=d;
   document.getElementById('s-left').textContent=left;
   document.getElementById('s-rec').textContent=rec;
-  document.getElementById('d-start').textContent=df(h.startDate);
+  document.getElementById('d-start').textContent=dft(h.startDate,h.startTime);
   let st='💪 Держишься';
   if(d>=gl)st='🏆 Цель достигнута!';
   else if(d>0&&d>=(h.record||0))st='🔥 Новый рекорд!';
@@ -399,12 +404,12 @@ function renderDetail(){
 
   const hl=document.getElementById('h-list');hl.innerHTML='';
   const si=document.createElement('div');si.className='history-item';
-  si.innerHTML=`<div class="h-dot green"></div><div><div class="h-date">Начало — ${df(h.startDate)}</div><div class="h-days">Текущая серия: ${d} ${dw(d)}</div></div>`;
+  si.innerHTML=`<div class="h-dot green"></div><div><div class="h-date">Начало — ${dft(h.startDate,h.startTime)}</div><div class="h-days">Текущая серия: ${d} ${dw(d)}</div></div>`;
   hl.appendChild(si);
   if(h.relapses&&h.relapses.length){
     [...h.relapses].reverse().forEach(r=>{
       const el=document.createElement('div');el.className='history-item';
-      el.innerHTML=`<div class="h-dot"></div><div><div class="h-date">Рецидив — ${df(r.date)}</div><div class="h-days">Продержался: ${r.days} ${dw(r.days)}</div></div>`;
+      el.innerHTML=`<div class="h-dot"></div><div><div class="h-date">Рецидив — ${dft(r.date,r.time)}</div><div class="h-days">Продержался: ${r.days} ${dw(r.days)}</div></div>`;
       hl.appendChild(el);
     });
   }
@@ -418,7 +423,8 @@ function startTimer(){
 
 function tick(){
   if(!habits[cur])return;
-  const start=new Date(habits[cur].startDate+'T00:00:00');
+  const h=habits[cur];
+  const start=new Date(h.startDate+'T'+(h.startTime||'00:00')+':00');
   const diff=Math.max(0,Date.now()-start.getTime());
   const s=Math.floor(diff/1000);
   document.getElementById('t-d').textContent=pad(Math.floor(s/86400));
@@ -448,15 +454,14 @@ function renderDp(){
   }
 }
 
-function numCh(d){
-  const e=document.getElementById('f-rec');
-  e.value=Math.max(0,(parseInt(e.value)||0)+d);
-}
+function numCh(d){const e=document.getElementById('f-rec');e.value=Math.max(0,(parseInt(e.value)||0)+d);}
 
 function openModal(){
   selE='🌿';
   document.getElementById('f-name').value='';
   document.getElementById('f-rec').value='0';
+  const now=new Date();
+  document.getElementById('f-time').value=pad(now.getHours())+':'+pad(now.getMinutes());
   renderEG();initDp();
   document.getElementById('modal').classList.add('open');
 }
@@ -467,7 +472,8 @@ function saveHabit(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){document.getElementById('f-name').focus();return;}
   const rec=parseInt(document.getElementById('f-rec').value)||0;
-  habits.push({name,emoji:selE,startDate:dpSel,record:rec,attempt:1,relapses:[]});
+  const time=document.getElementById('f-time').value||'00:00';
+  habits.push({name,emoji:selE,startDate:dpSel,startTime:time,record:rec,attempt:1,relapses:[]});
   save();closeModal();renderDash();
 }
 
@@ -476,23 +482,28 @@ function closeConfirm(){document.getElementById('confirm').classList.remove('ope
 
 function doRelapse(){
   const h=habits[cur];
-  const d=dayCount(h.startDate);
+  const d=dayCount(h.startDate,h.startTime);
   if(d>(h.record||0))h.record=d;
   if(!h.relapses)h.relapses=[];
-  h.relapses.push({date:new Date().toISOString().slice(0,10),days:d});
+  const now=new Date();
+  const nowDate=now.toISOString().slice(0,10);
+  const nowTime=pad(now.getHours())+':'+pad(now.getMinutes());
+  h.relapses.push({date:nowDate,time:nowTime,days:d});
   h.attempt=(h.attempt||1)+1;
-  h.startDate=new Date().toISOString().slice(0,10);
-  save();closeConfirm();
+  h.startDate=nowDate;
+  h.startTime=nowTime;
+  save();
+  closeConfirm();
   renderDetail();
   clearInterval(timerInt);timerInt=null;
   tick();
   timerInt=setInterval(tick,1000);
 }
 
-function save(){localStorage.setItem('bht6',JSON.stringify(habits));}
+function save(){localStorage.setItem('bht7',JSON.stringify(habits));}
 
 if(!habits.length){
-  habits=[{name:'Курение',emoji:'🚬',startDate:'2026-01-13',record:115,attempt:1,relapses:[]}];
+  habits=[{name:'Курение',emoji:'🚬',startDate:'2026-01-13',startTime:'00:00',record:115,attempt:1,relapses:[]}];
   save();
 }
 renderDash();
