@@ -3,189 +3,253 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0f0f17">
+<meta name="theme-color" content="#f2f2f7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Bad Habit Timer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',sans-serif;background:#0f0f17;color:#fff;min-height:100vh;overflow-x:hidden}
-.view{display:none;min-height:100vh}
-.view.active{display:block}
+body{font-family:'Inter',sans-serif;background:#f2f2f7;color:#1c1c1e;min-height:100vh;overflow-x:hidden}
+
+.view{display:none;opacity:0;transform:translateY(16px);transition:opacity .28s ease,transform .28s cubic-bezier(.34,1.2,.64,1)}
+.view.active{display:block;opacity:1;transform:translateY(0)}
 
 /* DASHBOARD */
-#v-dash{padding:36px 24px 100px}
-.dash-header h1{font-size:24px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
-.dash-date{font-size:13px;color:rgba(255,255,255,.35);margin-bottom:32px;font-weight:400}
-.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}
-.habit-card{background:#1a1a2a;border-radius:20px;padding:20px 16px;cursor:pointer;transition:transform .15s,background .15s;border:1px solid rgba(255,255,255,.06)}
-.habit-card:hover{transform:translateY(-2px);background:#1e1e30}
-.habit-card:active{transform:scale(.97)}
-.card-emoji{font-size:28px;margin-bottom:12px;display:block}
-.card-name{font-size:14px;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,.7)}
-.card-days{font-size:32px;font-weight:700;color:#fff;line-height:1;margin-bottom:2px}
-.card-days-lbl{font-size:11px;color:rgba(255,255,255,.3);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px}
-.card-bar-bg{height:3px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-bottom:8px}
-.card-bar-fill{height:3px;background:#7c6af5;border-radius:2px}
-.card-status{font-size:12px;color:rgba(255,255,255,.35);font-weight:500}
+#v-dash{min-height:100vh;padding:52px 20px 100px;max-width:480px;margin:0 auto}
+.dash-title{text-align:center;font-size:22px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.dash-date{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:32px}
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.habit-card{background:#fff;border-radius:22px;padding:18px 15px;cursor:pointer;border:1px solid rgba(0,0,0,.06);box-shadow:0 2px 12px rgba(0,0,0,.07);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease}
+.habit-card:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.12)}
+.habit-card:active{transform:scale(.95) translateY(0);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.card-emoji{font-size:28px;margin-bottom:10px;display:block}
+.card-name{font-size:12px;font-weight:600;color:#8e8e93;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+.card-days{font-size:30px;font-weight:700;color:#1c1c1e;line-height:1}
+.card-unit{font-size:11px;color:#8e8e93;font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px}
+.card-bar-bg{height:3px;background:rgba(0,0,0,.07);border-radius:2px;margin-bottom:8px;overflow:hidden}
+.card-bar{height:3px;background:#7c6af5;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.card-status{font-size:12px;color:#8e8e93;font-weight:500}
 .card-status.fire{color:#f5a623}
-.card-status.trophy{color:#f5c842}
-.btn-new-habit{width:100%;padding:16px;border-radius:16px;border:1.5px dashed rgba(255,255,255,.13);background:transparent;color:rgba(255,255,255,.35);font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:.2s}
-.btn-new-habit:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.6)}
-.empty-dash{text-align:center;padding:40px 0 32px;grid-column:1/-1}
-.empty-dash .big-icon{font-size:52px;margin-bottom:14px}
-.empty-dash p{font-size:14px;color:rgba(255,255,255,.3);line-height:1.6}
+.card-status.trophy{color:#f09f0e}
+.btn-add{width:100%;padding:15px;border-radius:16px;border:1.5px dashed rgba(0,0,0,.15);background:transparent;color:#8e8e93;font-size:15px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s ease}
+.btn-add:hover{background:rgba(124,106,245,.07);color:#7c6af5;border-color:rgba(124,106,245,.3)}
+.btn-add:active{transform:scale(.98)}
 
 /* DETAIL */
-#v-detail{padding:0 0 80px}
-.detail-top{padding:24px 24px 0}
-.btn-back{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.07);border:none;color:rgba(255,255,255,.55);font-size:14px;font-family:'Inter',sans-serif;padding:9px 14px;border-radius:12px;cursor:pointer;margin-bottom:24px;font-weight:500}
-.btn-back:hover{background:rgba(255,255,255,.11);color:#fff}
-.detail-body{padding:0 24px}
-.detail-name{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.2px}
-.detail-attempt{font-size:13px;color:rgba(255,255,255,.3);margin-bottom:28px}
-.ring-wrap{display:flex;justify-content:center;margin-bottom:24px}
-.status-wrap{text-align:center;margin-bottom:24px}
-.status-badge{display:inline-block;padding:7px 20px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(124,106,245,.18);color:#a99eff}
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
-.stat{background:#1a1a2a;border-radius:16px;padding:16px 10px;text-align:center;border:1px solid rgba(255,255,255,.05)}
-.stat-val{font-size:24px;font-weight:700;color:#fff;line-height:1}
-.stat-lbl{font-size:10px;color:rgba(255,255,255,.3);margin-top:5px;text-transform:uppercase;letter-spacing:.7px;font-weight:600}
-.section-title{font-size:11px;color:rgba(255,255,255,.28);text-transform:uppercase;letter-spacing:.8px;font-weight:600;margin-bottom:12px}
-.ms-list{display:flex;flex-direction:column;gap:8px;margin-bottom:28px}
-.ms-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;background:#1a1a2a;border:1px solid rgba(255,255,255,.05)}
-.ms-item.done{background:rgba(124,106,245,.1);border-color:rgba(124,106,245,.18)}
-.ms-item.current{background:rgba(124,106,245,.2);border:1px solid rgba(124,106,245,.4)}
-.ms-dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.12);flex-shrink:0}
+#v-detail{min-height:100vh;padding:0 0 80px}
+.detail-wrap{max-width:480px;margin:0 auto}
+.detail-top{padding:24px 20px 0;display:flex;align-items:center}
+.btn-back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid rgba(0,0,0,.09);color:#1c1c1e;font-size:14px;font-family:'Inter',sans-serif;padding:9px 14px;border-radius:12px;cursor:pointer;font-weight:500;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:all .2s ease}
+.btn-back:hover{background:#f8f8fc;transform:translateX(-2px)}
+.btn-back:active{transform:scale(.96)}
+.detail-body{padding:20px 20px 0}
+.detail-name{text-align:center;font-size:24px;font-weight:700;letter-spacing:-.3px;margin-bottom:4px}
+.detail-sub{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:20px}
+
+.timer-block{text-align:center;margin-bottom:6px}
+.timer{font-size:38px;font-weight:700;letter-spacing:3px;color:#7c6af5;font-variant-numeric:tabular-nums}
+.timer-labels{display:flex;justify-content:center;margin-bottom:24px;gap:0}
+.t-lbl{font-size:10px;color:#8e8e93;text-transform:uppercase;letter-spacing:.5px;font-weight:600;width:68px;text-align:center}
+
+.ring-wrap{display:flex;justify-content:center;margin-bottom:16px}
+.status-wrap{text-align:center;margin-bottom:20px}
+.status-badge{display:inline-block;padding:7px 20px;border-radius:20px;font-size:14px;font-weight:600;background:rgba(124,106,245,.12);color:#7c6af5;transition:all .3s ease}
+
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px}
+.stat{background:#fff;border-radius:16px;padding:14px 10px;text-align:center;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.stat-val{font-size:22px;font-weight:700;color:#1c1c1e}
+.stat-lbl{font-size:10px;color:#8e8e93;text-transform:uppercase;letter-spacing:.6px;font-weight:600;margin-top:4px}
+
+.start-info{text-align:center;font-size:13px;color:#8e8e93;margin-bottom:24px}
+.start-info strong{color:#1c1c1e;font-weight:500}
+
+.sec-title{font-size:11px;color:#8e8e93;text-transform:uppercase;letter-spacing:.8px;font-weight:700;margin-bottom:10px}
+
+.ms-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.ms-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:14px;background:#fff;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.04);transition:all .3s ease}
+.ms-item.done{background:rgba(124,106,245,.08);border-color:rgba(124,106,245,.18)}
+.ms-item.current{background:rgba(124,106,245,.13);border:1.5px solid rgba(124,106,245,.38)}
+.ms-dot{width:9px;height:9px;border-radius:50%;background:#d1d1d6;flex-shrink:0;transition:all .3s}
 .ms-item.done .ms-dot{background:#7c6af5}
-.ms-item.current .ms-dot{background:#a99eff}
-.ms-text{font-size:14px;color:rgba(255,255,255,.45);font-weight:500}
-.ms-item.done .ms-text{color:#a99eff}
-.ms-item.current .ms-text{color:#fff}
-.ms-right{margin-left:auto;font-size:12px;color:rgba(255,255,255,.22);font-weight:500}
+.ms-item.current .ms-dot{background:#7c6af5;box-shadow:0 0 0 3px rgba(124,106,245,.2)}
+.ms-text{font-size:14px;color:#8e8e93;font-weight:500}
+.ms-item.done .ms-text{color:#7c6af5}
+.ms-item.current .ms-text{color:#1c1c1e;font-weight:600}
+.ms-right{margin-left:auto;font-size:12px;color:#c7c7cc;font-weight:500}
 .ms-item.done .ms-right{color:#7c6af5}
-.ms-item.current .ms-right{color:rgba(255,255,255,.45)}
-.btn-relapse{width:100%;padding:14px;border-radius:14px;border:1px solid rgba(220,53,69,.22);background:transparent;color:rgba(220,53,69,.55);font-size:14px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:.2s}
-.btn-relapse:hover{background:rgba(220,53,69,.07);color:#dc3545}
+.ms-item.current .ms-right{color:#8e8e93}
 
-/* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:100;align-items:flex-end;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:#14142a;border-radius:28px 28px 0 0;padding:28px 24px 52px;width:100%;max-width:500px;max-height:92vh;overflow-y:auto}
-.modal-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;margin:0 auto 24px}
-.modal h2{font-size:20px;font-weight:700;margin-bottom:24px;letter-spacing:-.2px}
-.field{margin-bottom:20px}
-.field label{display:block;font-size:11px;color:rgba(255,255,255,.35);font-weight:600;text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
-.field input[type=text]{width:100%;padding:14px 16px;border-radius:14px;border:1.5px solid rgba(255,255,255,.09);background:rgba(255,255,255,.05);color:#fff;font-size:16px;font-family:'Inter',sans-serif;font-weight:500;outline:none;transition:.2s}
-.field input[type=text]:focus{border-color:rgba(124,106,245,.55);background:rgba(124,106,245,.05)}
-.field input[type=text]::placeholder{color:rgba(255,255,255,.18)}
+.history-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.history-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-radius:14px;border:1px solid rgba(0,0,0,.06);box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.h-dot{width:9px;height:9px;border-radius:50%;background:#ff3b30;flex-shrink:0}
+.h-dot.green{background:#34c759}
+.h-text{}
+.h-date{font-size:13px;font-weight:500;color:#1c1c1e}
+.h-days{font-size:12px;color:#8e8e93;margin-top:1px}
 
-/* Number input */
-.num-input-wrap{display:flex;align-items:center;background:rgba(255,255,255,.05);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;overflow:hidden}
-.num-input-wrap:focus-within{border-color:rgba(124,106,245,.55)}
-.num-btn{width:52px;height:52px;background:transparent;border:none;color:rgba(255,255,255,.4);font-size:24px;font-weight:300;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
-.num-btn:hover{color:#fff;background:rgba(255,255,255,.06)}
-.num-val{flex:1;background:transparent;border:none;color:#fff;font-size:20px;font-weight:700;text-align:center;font-family:'Inter',sans-serif;outline:none;padding:0;-moz-appearance:textfield}
-.num-val::-webkit-inner-spin-button,.num-val::-webkit-outer-spin-button{-webkit-appearance:none}
-
-/* Date picker */
-.date-picker{background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.09);border-radius:14px;padding:16px}
-.dp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.dp-nav button{background:rgba(255,255,255,.07);border:none;color:#fff;width:34px;height:34px;border-radius:10px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;transition:.15s}
-.dp-nav button:hover{background:rgba(255,255,255,.14)}
-.dp-month-label{font-size:15px;font-weight:600;color:#fff}
-.dp-weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:6px}
-.dp-wd{font-size:11px;color:rgba(255,255,255,.25);text-align:center;padding:4px 0;font-weight:600}
-.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.dp-day{font-size:13px;color:rgba(255,255,255,.55);text-align:center;padding:8px 2px;border-radius:8px;cursor:pointer;border:none;background:transparent;font-family:'Inter',sans-serif;font-weight:500;transition:.15s;width:100%}
-.dp-day:hover:not(:disabled){background:rgba(255,255,255,.08);color:#fff}
-.dp-day.today{color:#a99eff;font-weight:700}
-.dp-day.selected{background:#7c6af5 !important;color:#fff !important;font-weight:700}
-.dp-day.other-month{color:rgba(255,255,255,.15)}
-.dp-day:disabled{cursor:default}
-
-.modal-btns{display:flex;gap:12px;margin-top:24px}
-.btn-cancel{flex:1;padding:14px;border-radius:14px;border:1.5px solid rgba(255,255,255,.09);background:transparent;color:rgba(255,255,255,.45);font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
-.btn-save{flex:2;padding:14px;border-radius:14px;border:none;background:#7c6af5;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:.15s}
-.btn-save:hover{background:#8f7ef7}
-
-/* Confirm */
-.confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;align-items:center;justify-content:center;padding:24px}
-.confirm-bg.open{display:flex}
-.confirm-box{background:#14142a;border-radius:24px;padding:32px 24px;max-width:340px;width:100%;text-align:center;border:1px solid rgba(255,255,255,.07)}
-.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:10px}
-.confirm-box p{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:28px;line-height:1.6}
-.confirm-btns{display:flex;gap:10px}
-.btn-no{flex:1;padding:13px;border-radius:12px;border:1.5px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.45);font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500}
-.btn-yes{flex:1;padding:13px;border-radius:12px;border:none;background:#c0392b;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-relapse{width:100%;padding:14px;border-radius:14px;border:1.5px solid rgba(255,59,48,.2);background:rgba(255,59,48,.05);color:rgba(255,59,48,.8);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .22s ease}
+.btn-relapse:hover{background:rgba(255,59,48,.1);border-color:rgba(255,59,48,.4);color:#ff3b30}
+.btn-relapse:active{transform:scale(.97)}
 
 /* FAB */
-.fab{position:fixed;bottom:28px;right:24px;width:56px;height:56px;border-radius:18px;background:#7c6af5;border:none;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;transition:.2s;font-family:'Inter',sans-serif;box-shadow:0 8px 28px rgba(124,106,245,.35)}
-.fab:hover{background:#8f7ef7;transform:scale(1.05)}
-.fab:active{transform:scale(.95)}
+.fab{position:fixed;bottom:28px;right:24px;width:56px;height:56px;border-radius:18px;background:#7c6af5;border:none;color:#fff;font-size:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:50;font-family:'Inter',sans-serif;box-shadow:0 8px 24px rgba(124,106,245,.38);transition:all .25s cubic-bezier(.34,1.56,.64,1)}
+.fab:hover{transform:scale(1.1);box-shadow:0 12px 32px rgba(124,106,245,.48)}
+.fab:active{transform:scale(.93)}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:flex-end;justify-content:center;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:28px 28px 0 0;padding:20px 20px 44px;width:100%;max-width:480px;max-height:96vh;overflow:hidden}
+.modal-handle{width:36px;height:4px;background:#d1d1d6;border-radius:2px;margin:0 auto 20px}
+.modal h2{font-size:19px;font-weight:700;margin-bottom:16px;letter-spacing:-.2px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;color:#8e8e93;font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.field input[type=text]{width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid rgba(0,0,0,.1);background:#f8f8fc;color:#1c1c1e;font-size:16px;font-family:'Inter',sans-serif;font-weight:500;outline:none;transition:border-color .2s,background .2s}
+.field input[type=text]:focus{border-color:#7c6af5;background:rgba(124,106,245,.04)}
+.field input[type=text]::placeholder{color:#c7c7cc}
+
+.emoji-grid{display:flex;flex-wrap:wrap;gap:6px}
+.e-btn{width:38px;height:38px;border-radius:10px;border:1.5px solid transparent;background:#f2f2f7;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s cubic-bezier(.34,1.56,.64,1)}
+.e-btn:hover{background:rgba(124,106,245,.1);transform:scale(1.12)}
+.e-btn:active{transform:scale(.95)}
+.e-btn.sel{border-color:#7c6af5;background:rgba(124,106,245,.12);transform:scale(1.12)}
+
+.dp-wrap{background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;padding:12px}
+.dp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.dp-nav-btn{background:rgba(0,0,0,.06);border:none;color:#1c1c1e;width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'Inter',sans-serif}
+.dp-nav-btn:hover{background:rgba(124,106,245,.15)}
+.dp-nav-btn:active{transform:scale(.9)}
+.dp-month{font-size:13px;font-weight:600}
+.dp-wds{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:3px}
+.dp-wd{font-size:10px;color:#8e8e93;text-align:center;padding:2px 0;font-weight:700}
+.dp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.dp-d{font-size:12px;text-align:center;padding:6px 2px;border-radius:7px;cursor:pointer;border:none;background:transparent;font-family:'Inter',sans-serif;font-weight:500;color:#1c1c1e;transition:all .15s;width:100%}
+.dp-d:hover:not(:disabled){background:rgba(124,106,245,.1)}
+.dp-d.today{color:#7c6af5;font-weight:700}
+.dp-d.sel{background:#7c6af5!important;color:#fff!important;font-weight:700}
+.dp-d.other{color:#c7c7cc}
+.dp-d:disabled{cursor:default}
+
+.num-row{display:flex;align-items:center;background:#f8f8fc;border:1.5px solid rgba(0,0,0,.08);border-radius:12px;overflow:hidden}
+.n-btn{width:44px;height:44px;border:none;background:transparent;color:#8e8e93;font-size:22px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.n-btn:hover{background:rgba(124,106,245,.08);color:#7c6af5}
+.n-btn:active{transform:scale(.9)}
+.n-val{flex:1;border:none;background:transparent;text-align:center;font-size:18px;font-weight:700;color:#1c1c1e;font-family:'Inter',sans-serif;outline:none;-moz-appearance:textfield}
+.n-val::-webkit-inner-spin-button,.n-val::-webkit-outer-spin-button{-webkit-appearance:none}
+
+.modal-btns{display:flex;gap:10px;margin-top:16px}
+.btn-cancel{flex:1;padding:13px;border-radius:14px;border:1.5px solid rgba(0,0,0,.1);background:#f2f2f7;color:#8e8e93;font-size:15px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s}
+.btn-cancel:hover{background:#e8e8ef}
+.btn-cancel:active{transform:scale(.97)}
+.btn-save{flex:2;padding:13px;border-radius:14px;border:none;background:#7c6af5;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 16px rgba(124,106,245,.32);transition:all .22s cubic-bezier(.34,1.56,.64,1)}
+.btn-save:hover{background:#8f7ef7;box-shadow:0 6px 20px rgba(124,106,245,.42)}
+.btn-save:active{transform:scale(.97)}
+
+/* CONFIRM */
+.confirm-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.confirm-bg.open{display:flex}
+.confirm-box{background:#fff;border-radius:24px;padding:28px 24px;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.18)}
+.confirm-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.confirm-box p{font-size:14px;color:#8e8e93;margin-bottom:24px;line-height:1.6}
+.confirm-btns{display:flex;gap:10px}
+.c-no{flex:1;padding:13px;border-radius:12px;border:1.5px solid rgba(0,0,0,.1);background:#f2f2f7;color:#8e8e93;font-size:14px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;transition:all .2s}
+.c-no:active{transform:scale(.97)}
+.c-yes{flex:1;padding:13px;border-radius:12px;border:none;background:#ff3b30;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.c-yes:hover{background:#ff2d20}
+.c-yes:active{transform:scale(.97)}
 </style>
 </head>
 <body>
 
+<!-- DASHBOARD -->
 <div id="v-dash" class="view active">
-  <div id="v-dash-inner" style="padding:36px 24px 100px">
-    <div class="dash-header"><h1>Bad Habit Timer</h1></div>
+  <div style="max-width:480px;margin:0 auto;padding:52px 20px 100px">
+    <h1 class="dash-title">Bad Habit Timer</h1>
     <p class="dash-date" id="dash-date"></p>
     <div class="cards-grid" id="cards-grid"></div>
-    <button class="btn-new-habit" onclick="openModal()">+ Добавить привычку</button>
+    <button class="btn-add" onclick="openModal()">+ Добавить привычку</button>
   </div>
 </div>
 
+<!-- DETAIL -->
 <div id="v-detail" class="view">
-  <div class="detail-top">
-    <button class="btn-back" onclick="showDash()">← Назад</button>
-  </div>
-  <div class="detail-body">
-    <div class="detail-name" id="d-name"></div>
-    <div class="detail-attempt" id="d-attempt"></div>
-    <div class="ring-wrap">
-      <svg width="190" height="190" viewBox="0 0 190 190" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="95" cy="95" r="78" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="13"/>
-        <circle id="ring-progress" cx="95" cy="95" r="78" fill="none" stroke="#7c6af5" stroke-width="13"
-          stroke-linecap="round" stroke-dasharray="490" stroke-dashoffset="490"
-          transform="rotate(-90 95 95)" style="transition:stroke-dashoffset .9s cubic-bezier(.4,0,.2,1)"/>
-        <text x="95" y="84" text-anchor="middle" fill="#fff" font-size="38" font-weight="700" font-family="Inter,sans-serif" id="ring-days">0</text>
-        <text x="95" y="107" text-anchor="middle" fill="rgba(255,255,255,.38)" font-size="13" font-family="Inter,sans-serif" id="ring-label">дней</text>
-        <text x="95" y="126" text-anchor="middle" fill="rgba(255,255,255,.2)" font-size="11" font-family="Inter,sans-serif" id="ring-of"></text>
-      </svg>
+  <div class="detail-wrap">
+    <div class="detail-top">
+      <button class="btn-back" onclick="showDash()">← Назад</button>
     </div>
-    <div class="status-wrap"><span class="status-badge" id="status-text"></span></div>
-    <div class="stats">
-      <div class="stat"><div class="stat-val" id="s-goal">—</div><div class="stat-lbl">Цель</div></div>
-      <div class="stat"><div class="stat-val" id="s-left">—</div><div class="stat-lbl">Осталось</div></div>
-      <div class="stat"><div class="stat-val" id="s-record">—</div><div class="stat-lbl">Рекорд</div></div>
+    <div class="detail-body">
+      <div class="detail-name" id="d-name"></div>
+      <div class="detail-sub" id="d-sub"></div>
+
+      <div class="timer-block">
+        <div class="timer" id="d-timer">000:00:00:00</div>
+      </div>
+      <div class="timer-labels">
+        <span class="t-lbl">Дни</span>
+        <span class="t-lbl">Часы</span>
+        <span class="t-lbl">Мин</span>
+        <span class="t-lbl">Сек</span>
+      </div>
+
+      <div class="ring-wrap">
+        <svg width="224" height="224" viewBox="0 0 224 224" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="112" cy="112" r="94" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="14"/>
+          <circle cx="112" cy="112" r="94" fill="none" stroke="rgba(124,106,245,.12)" stroke-width="14"
+            stroke-dasharray="591" stroke-dashoffset="0" transform="rotate(-90 112 112)"/>
+          <circle id="ring-progress" cx="112" cy="112" r="94" fill="none" stroke="#7c6af5" stroke-width="14"
+            stroke-linecap="round" stroke-dasharray="591" stroke-dashoffset="591"
+            transform="rotate(-90 112 112)" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+          <text x="112" y="104" text-anchor="middle" fill="#8e8e93" font-size="13" font-weight="500" font-family="Inter,sans-serif">Текущая цель</text>
+          <text x="112" y="130" text-anchor="middle" fill="#7c6af5" font-size="28" font-weight="700" font-family="Inter,sans-serif" id="r-goal">—</text>
+        </svg>
+      </div>
+
+      <div class="status-wrap"><span class="status-badge" id="d-status"></span></div>
+
+      <div class="stats">
+        <div class="stat"><div class="stat-val" id="s-days">—</div><div class="stat-lbl">Дней</div></div>
+        <div class="stat"><div class="stat-val" id="s-left">—</div><div class="stat-lbl">Осталось</div></div>
+        <div class="stat"><div class="stat-val" id="s-rec">—</div><div class="stat-lbl">Рекорд</div></div>
+      </div>
+
+      <div class="start-info">Начало: <strong id="d-start"></strong></div>
+
+      <div style="margin-top:24px" class="sec-title">Цели</div>
+      <div class="ms-list" id="ms-list"></div>
+
+      <div class="sec-title">История</div>
+      <div class="history-list" id="h-list"></div>
+
+      <button class="btn-relapse" onclick="confirmRelapse()">Рецидив</button>
     </div>
-    <div class="section-title">Milestone-ы</div>
-    <div class="ms-list" id="ms-list"></div>
-    <button class="btn-relapse" onclick="confirmRelapse()">Был срыв</button>
   </div>
 </div>
 
 <button class="fab" id="fab-btn" onclick="openModal()">+</button>
 
-<div class="modal-bg" id="modal">
-  <div class="modal">
+<!-- MODAL -->
+<div class="modal-bg" id="modal" onclick="bgClick(event)">
+  <div class="modal" id="modal-box">
     <div class="modal-handle"></div>
     <h2>Новая привычка</h2>
     <div class="field">
       <label>Название</label>
-      <input type="text" id="f-name" placeholder="Например: Курение"/>
+      <input type="text" id="f-name" placeholder="Например: Курение" oninput="autoEmoji()"/>
+    </div>
+    <div class="field">
+      <label>Иконка</label>
+      <div class="emoji-grid" id="emoji-grid"></div>
     </div>
     <div class="field">
       <label>Дата начала</label>
-      <div class="date-picker">
+      <div class="dp-wrap">
         <div class="dp-nav">
-          <button onclick="dpPrev()">‹</button>
-          <span class="dp-month-label" id="dp-label"></span>
-          <button onclick="dpNext()">›</button>
+          <button class="dp-nav-btn" onclick="dpPrev()">‹</button>
+          <span class="dp-month" id="dp-label"></span>
+          <button class="dp-nav-btn" onclick="dpNext()">›</button>
         </div>
-        <div class="dp-weekdays">
+        <div class="dp-wds">
           <div class="dp-wd">Пн</div><div class="dp-wd">Вт</div><div class="dp-wd">Ср</div>
           <div class="dp-wd">Чт</div><div class="dp-wd">Пт</div><div class="dp-wd">Сб</div><div class="dp-wd">Вс</div>
         </div>
@@ -193,11 +257,11 @@ body{font-family:'Inter',sans-serif;background:#0f0f17;color:#fff;min-height:100
       </div>
     </div>
     <div class="field">
-      <label>Рекорд (дней, если был)</label>
-      <div class="num-input-wrap">
-        <button class="num-btn" onclick="numChange(-1)">−</button>
-        <input class="num-val" id="f-record" type="number" value="0" min="0" readonly/>
-        <button class="num-btn" onclick="numChange(1)">+</button>
+      <label>Рекорд (дней)</label>
+      <div class="num-row">
+        <button class="n-btn" onclick="numCh(-1)">−</button>
+        <input class="n-val" id="f-rec" type="number" value="0" min="0" readonly/>
+        <button class="n-btn" onclick="numCh(1)">+</button>
       </div>
     </div>
     <div class="modal-btns">
@@ -207,169 +271,212 @@ body{font-family:'Inter',sans-serif;background:#0f0f17;color:#fff;min-height:100
   </div>
 </div>
 
+<!-- CONFIRM -->
 <div class="confirm-bg" id="confirm">
   <div class="confirm-box">
-    <h3>Был срыв?</h3>
-    <p>Счётчик сбросится до нуля, но рекорд сохранится. Главное — продолжать.</p>
+    <h3>Рецидив?</h3>
+    <p>Счётчик сбросится до нуля. Рекорд и история сохранятся.</p>
     <div class="confirm-btns">
-      <button class="btn-no" onclick="closeConfirm()">Нет</button>
-      <button class="btn-yes" onclick="doRelapse()">Да, сброс</button>
+      <button class="c-no" onclick="closeConfirm()">Нет</button>
+      <button class="c-yes" onclick="doRelapse()">Да</button>
     </div>
   </div>
 </div>
 
 <script>
-const MILESTONES=[3,7,14,30,90,180,365];
+const ML=[3,7,14,30,90,180,365];
 const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
-const EMOJIS=['🚬','🍺','🍬','📱','🎮','☕','🍔','💊','😤','🌿'];
-let habits=JSON.parse(localStorage.getItem('bht3_habits')||'[]');
-let current=0,dpYear,dpMonth,dpSelected;
+const EMOJIS=['🚬','🍺','🍬','📱','☕','🍔','💊','🎮','😴','🏃','🌿','✨','🎰','💸','😤','🧁','🍷','📺'];
+const EMAP=[
+  [['кур','сигар','табак'],'🚬'],
+  [['алко','пив','вин','водк','ром','виски'],'🍺'],
+  [['сахар','слад','шокол','конфет','торт'],'🍬'],
+  [['соцсет','инстаграм','тикток','телефон','смартфон'],'📱'],
+  [['кофе'],'☕'],
+  [['фастфуд','бургер'],'🍔'],
+  [['нарко','таблет'],'💊'],
+  [['игр','казино','азарт','ставк'],'🎰'],
+  [['сон','просып','режим'],'😴'],
+  [['бег','спорт','трениров'],'🏃'],
+  [['деньг','трат','шопинг'],'💸'],
+  [['телевиз','сериал','ютуб'],'📺'],
+];
 
-function daysBetween(s){
-  const a=new Date(s);a.setHours(0,0,0,0);
-  const b=new Date();b.setHours(0,0,0,0);
-  return Math.max(0,Math.round((b-a)/86400000));
+let habits=JSON.parse(localStorage.getItem('bht5')||'[]');
+let cur=0,timer=null,dpY,dpM,dpSel,selE='🌿';
+
+function pad(n,l=2){return String(n).padStart(l,'0')}
+function dw(n){if(n%10===1&&n%100!==11)return'день';if([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))return'дня';return'дней'}
+function df(s){return new Date(s).toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'})}
+function days(s){const a=new Date(s);a.setHours(0,0,0,0);const b=new Date();b.setHours(0,0,0,0);return Math.max(0,Math.round((b-a)/86400000))}
+function goal(d){for(const m of ML)if(d<m)return m;return ML[ML.length-1]}
+
+function autoEmoji(){
+  const n=document.getElementById('f-name').value.toLowerCase();
+  for(const[keys,e]of EMAP){if(keys.some(k=>n.includes(k))){selE=e;renderEG();return}}
 }
-function getGoal(d){for(const m of MILESTONES)if(d<m)return m;return MILESTONES[MILESTONES.length-1];}
-function dayWord(n){
-  if(n%10===1&&n%100!==11)return 'день';
-  if([2,3,4].includes(n%10)&&![12,13,14].includes(n%100))return 'дня';
-  return 'дней';
+
+function renderEG(){
+  const g=document.getElementById('emoji-grid');g.innerHTML='';
+  EMOJIS.forEach(e=>{
+    const b=document.createElement('button');
+    b.className='e-btn'+(e===selE?' sel':'');
+    b.textContent=e;b.type='button';
+    b.onclick=()=>{selE=e;renderEG()};
+    g.appendChild(b);
+  });
 }
 
 function showDash(){
-  document.getElementById('v-dash').classList.add('active');
-  document.getElementById('v-detail').classList.remove('active');
-  document.getElementById('fab-btn').style.display='flex';
-  renderDash();
+  clearInterval(timer);
+  const d=document.getElementById('v-detail'),h=document.getElementById('v-dash');
+  d.style.opacity='0';d.style.transform='translateY(16px)';
+  setTimeout(()=>{d.classList.remove('active');h.classList.add('active');document.getElementById('fab-btn').style.display='flex';renderDash()},120);
 }
+
 function showDetail(i){
-  current=i;
-  document.getElementById('v-dash').classList.remove('active');
-  document.getElementById('v-detail').classList.add('active');
-  document.getElementById('fab-btn').style.display='none';
-  renderDetail();
+  cur=i;
+  const h=document.getElementById('v-dash'),d=document.getElementById('v-detail');
+  h.style.opacity='0';h.style.transform='translateY(16px)';
+  setTimeout(()=>{
+    h.classList.remove('active');h.style.opacity='';h.style.transform='';
+    d.classList.add('active');
+    document.getElementById('fab-btn').style.display='none';
+    renderDetail();startTimer();
+  },120);
 }
 
 function renderDash(){
-  const today=new Date();
-  document.getElementById('dash-date').textContent=today.toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
-  const grid=document.getElementById('cards-grid');
-  grid.innerHTML='';
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+  const g=document.getElementById('cards-grid');g.innerHTML='';
   if(!habits.length){
-    grid.innerHTML='<div class="empty-dash"><div class="big-icon">🌱</div><p>Добавь первую привычку<br>и начни отсчёт</p></div>';
+    g.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:40px 0 20px"><div style="font-size:50px;margin-bottom:12px">🌱</div><p style="color:#8e8e93;font-size:14px">Добавь первую привычку</p></div>';
     return;
   }
   habits.forEach((h,i)=>{
-    const days=daysBetween(h.startDate);
-    const goal=getGoal(days);
-    const pct=Math.min(100,Math.round(days/goal*100));
+    const d=days(h.startDate),gl=goal(d),pct=Math.min(100,Math.round(d/gl*100));
     let st='💪 Держишься',sc='';
-    if(days>=goal){st='🏆 Цель!';sc='trophy';}
-    else if(days>0&&days>=(h.record||0)){st='🔥 Рекорд!';sc='fire';}
-    const c=document.createElement('div');
-    c.className='habit-card';
-    c.onclick=()=>showDetail(i);
-    c.innerHTML=`<span class="card-emoji">${h.emoji||'🌿'}</span><div class="card-name">${h.name}</div><div class="card-days">${days}</div><div class="card-days-lbl">${dayWord(days)}</div><div class="card-bar-bg"><div class="card-bar-fill" style="width:${pct}%"></div></div><div class="card-status ${sc}">${st}</div>`;
-    grid.appendChild(c);
+    if(d>=gl){st='🏆 Цель!';sc='trophy';}
+    else if(d>0&&d>=(h.record||0)){st='🔥 Рекорд!';sc='fire';}
+    const c=document.createElement('div');c.className='habit-card';c.onclick=()=>showDetail(i);
+    c.innerHTML=`<span class="card-emoji">${h.emoji||'🌿'}</span><div class="card-name">${h.name}</div><div class="card-days">${d}</div><div class="card-unit">${dw(d)}</div><div class="card-bar-bg"><div class="card-bar" style="width:${pct}%"></div></div><div class="card-status ${sc}">${st}</div>`;
+    g.appendChild(c);
   });
 }
 
 function renderDetail(){
-  const h=habits[current];
-  const days=daysBetween(h.startDate);
-  const goal=getGoal(days);
-  const left=Math.max(0,goal-days);
-  const record=Math.max(h.record||0,days);
-  const pct=Math.min(1,days/goal);
+  const h=habits[cur];
+  const d=days(h.startDate),gl=goal(d),left=Math.max(0,gl-d),rec=Math.max(h.record||0,d),pct=Math.min(1,d/gl);
   document.getElementById('d-name').textContent=(h.emoji||'🌿')+' '+h.name;
-  document.getElementById('d-attempt').textContent='Попытка '+(h.attempt||1);
-  document.getElementById('ring-days').textContent=days;
-  document.getElementById('ring-label').textContent=dayWord(days);
-  document.getElementById('ring-of').textContent='из '+goal;
-  setTimeout(()=>document.getElementById('ring-progress').style.strokeDashoffset=490*(1-pct),50);
-  document.getElementById('s-goal').textContent=goal;
+  document.getElementById('d-sub').textContent='Попытка '+(h.attempt||1);
+  document.getElementById('r-goal').textContent=gl+' дн.';
+  document.getElementById('s-days').textContent=d;
   document.getElementById('s-left').textContent=left;
-  document.getElementById('s-record').textContent=record;
-  let status='💪 Держишься';
-  if(days>=goal)status='🏆 Цель достигнута!';
-  else if(days>0&&days>=(h.record||0))status='🔥 Новый рекорд!';
-  document.getElementById('status-text').textContent=status;
-  const ml=document.getElementById('ms-list');
-  ml.innerHTML='';
-  MILESTONES.forEach(m=>{
-    const done=days>=m,isCur=!done&&getGoal(days)===m;
-    const d=document.createElement('div');
-    d.className='ms-item'+(done?' done':isCur?' current':'');
-    const r=done?'✓ Выполнено':(isCur?'осталось '+(m-days)+' д.':'через '+(m-days)+' д.');
-    d.innerHTML=`<div class="ms-dot"></div><span class="ms-text">${m} дней</span><span class="ms-right">${r}</span>`;
-    ml.appendChild(d);
+  document.getElementById('s-rec').textContent=rec;
+  document.getElementById('d-start').textContent=df(h.startDate);
+  let st='💪 Держишься';
+  if(d>=gl)st='🏆 Цель достигнута!';
+  else if(d>0&&d>=(h.record||0))st='🔥 Новый рекорд!';
+  document.getElementById('d-status').textContent=st;
+  setTimeout(()=>{document.getElementById('ring-progress').style.strokeDashoffset=591*(1-pct)},80);
+
+  const ml=document.getElementById('ms-list');ml.innerHTML='';
+  ML.forEach(m=>{
+    const done=d>=m,isCur=!done&&goal(d)===m;
+    const el=document.createElement('div');
+    el.className='ms-item'+(done?' done':isCur?' current':'');
+    const r=done?'✓':(isCur?`осталось ${m-d} д.`:`через ${m-d} д.`);
+    el.innerHTML=`<div class="ms-dot"></div><span class="ms-text">${m} дней</span><span class="ms-right">${r}</span>`;
+    ml.appendChild(el);
   });
+
+  const hl=document.getElementById('h-list');hl.innerHTML='';
+  const si=document.createElement('div');si.className='history-item';
+  si.innerHTML=`<div class="h-dot green"></div><div class="h-text"><div class="h-date">Начало — ${df(h.startDate)}</div><div class="h-days">Текущая серия: ${d} ${dw(d)}</div></div>`;
+  hl.appendChild(si);
+  if(h.relapses&&h.relapses.length){
+    [...h.relapses].reverse().forEach(r=>{
+      const el=document.createElement('div');el.className='history-item';
+      el.innerHTML=`<div class="h-dot"></div><div class="h-text"><div class="h-date">Рецидив — ${df(r.date)}</div><div class="h-days">Продержался: ${r.days} ${dw(r.days)}</div></div>`;
+      hl.appendChild(el);
+    });
+  }
+}
+
+function startTimer(){
+  clearInterval(timer);
+  tick();
+  timer=setInterval(tick,1000);
+}
+
+function tick(){
+  if(!habits[cur])return;
+  const h=habits[cur];
+  const start=new Date(h.startDate+'T00:00:00');
+  const diff=Math.max(0,Date.now()-start.getTime());
+  const s=Math.floor(diff/1000);
+  const d=Math.floor(s/86400),hr=Math.floor((s%86400)/3600),mn=Math.floor((s%3600)/60),sc=s%60;
+  document.getElementById('d-timer').textContent=`${pad(d,3)}:${pad(hr)}:${pad(mn)}:${pad(sc)}`;
 }
 
 function initDp(){
-  const n=new Date();
-  dpYear=n.getFullYear();dpMonth=n.getMonth();
-  dpSelected=n.toISOString().slice(0,10);
-  renderDp();
+  const n=new Date();dpY=n.getFullYear();dpM=n.getMonth();dpSel=n.toISOString().slice(0,10);renderDp();
 }
-function dpPrev(){dpMonth--;if(dpMonth<0){dpMonth=11;dpYear--;}renderDp();}
-function dpNext(){dpMonth++;if(dpMonth>11){dpMonth=0;dpYear++;}renderDp();}
+function dpPrev(){dpM--;if(dpM<0){dpM=11;dpY--;}renderDp();}
+function dpNext(){dpM++;if(dpM>11){dpM=0;dpY++;}renderDp();}
 function renderDp(){
-  document.getElementById('dp-label').textContent=MONTHS[dpMonth]+' '+dpYear;
-  const c=document.getElementById('dp-days');
-  c.innerHTML='';
-  const first=new Date(dpYear,dpMonth,1).getDay();
-  const offset=first===0?6:first-1;
-  const daysInMonth=new Date(dpYear,dpMonth+1,0).getDate();
+  document.getElementById('dp-label').textContent=MONTHS[dpM]+' '+dpY;
+  const c=document.getElementById('dp-days');c.innerHTML='';
+  const first=new Date(dpY,dpM,1).getDay(),off=first===0?6:first-1;
+  const dim=new Date(dpY,dpM+1,0).getDate();
   const today=new Date().toISOString().slice(0,10);
-  for(let i=0;i<offset;i++){const b=document.createElement('button');b.className='dp-day';b.disabled=true;c.appendChild(b);}
-  for(let d=1;d<=daysInMonth;d++){
-    const ds=dpYear+'-'+String(dpMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  for(let i=0;i<off;i++){const b=document.createElement('button');b.className='dp-d other';b.disabled=true;c.appendChild(b);}
+  for(let d=1;d<=dim;d++){
+    const ds=`${dpY}-${pad(dpM+1)}-${pad(d)}`;
     const b=document.createElement('button');
-    b.className='dp-day'+(ds===today?' today':'')+(ds===dpSelected?' selected':'');
-    b.textContent=d;
-    b.onclick=()=>{dpSelected=ds;renderDp();};
+    b.className='dp-d'+(ds===today?' today':'')+(ds===dpSel?' sel':'');
+    b.textContent=d;b.onclick=()=>{dpSel=ds;renderDp();};
     c.appendChild(b);
   }
 }
 
-function numChange(delta){
-  const el=document.getElementById('f-record');
-  el.value=Math.max(0,(parseInt(el.value)||0)+delta);
-}
+function numCh(d){const e=document.getElementById('f-rec');e.value=Math.max(0,(parseInt(e.value)||0)+d);}
 
 function openModal(){
+  selE='🌿';
   document.getElementById('f-name').value='';
-  document.getElementById('f-record').value='0';
-  initDp();
+  document.getElementById('f-rec').value='0';
+  renderEG();initDp();
   document.getElementById('modal').classList.add('open');
 }
 function closeModal(){document.getElementById('modal').classList.remove('open');}
+function bgClick(e){if(e.target===document.getElementById('modal'))closeModal();}
 
 function saveHabit(){
   const name=document.getElementById('f-name').value.trim();
   if(!name){document.getElementById('f-name').focus();return;}
-  const rec=parseInt(document.getElementById('f-record').value)||0;
-  const emoji=EMOJIS[habits.length%EMOJIS.length];
-  habits.push({name,startDate:dpSelected,record:rec,attempt:1,emoji});
+  const rec=parseInt(document.getElementById('f-rec').value)||0;
+  habits.push({name,emoji:selE,startDate:dpSel,record:rec,attempt:1,relapses:[]});
   save();closeModal();renderDash();
 }
 
 function confirmRelapse(){document.getElementById('confirm').classList.add('open');}
 function closeConfirm(){document.getElementById('confirm').classList.remove('open');}
 function doRelapse(){
-  const h=habits[current];
-  const days=daysBetween(h.startDate);
-  if(days>(h.record||0))h.record=days;
+  const h=habits[cur];
+  const d=days(h.startDate);
+  if(d>(h.record||0))h.record=d;
+  if(!h.relapses)h.relapses=[];
+  h.relapses.push({date:new Date().toISOString().slice(0,10),days:d});
   h.attempt=(h.attempt||1)+1;
   h.startDate=new Date().toISOString().slice(0,10);
-  save();closeConfirm();renderDetail();
+  save();closeConfirm();renderDetail();startTimer();
 }
-function save(){localStorage.setItem('bht3_habits',JSON.stringify(habits));}
+
+function save(){localStorage.setItem('bht5',JSON.stringify(habits));}
 
 if(!habits.length){
-  habits=[{name:'Курение',startDate:'2026-01-13',record:115,attempt:1,emoji:'🚬'}];
+  habits=[{name:'Курение',emoji:'🚬',startDate:'2026-01-13',record:115,attempt:1,relapses:[]}];
   save();
 }
 renderDash();
